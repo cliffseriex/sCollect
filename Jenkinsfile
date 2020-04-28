@@ -11,7 +11,7 @@ pipeline{
             /* This builds the actual image; synonymous to
          * docker build on the command line */
         echo ' Building Docker Image ...'
-        app = docker.build("scollect") 
+        app = docker.build("scollect:ecollect") 
             }  
          }
     }
