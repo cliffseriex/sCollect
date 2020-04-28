@@ -11,7 +11,7 @@ pipeline{
             /* This builds the actual image; synonymous to
          * docker build on the command line */
         echo ' Building Docker Image ...'
-        app = docker.build("html-server-image/sCollect") 
+        app = docker.build("scollect") 
             }  
          }
     }
@@ -35,9 +35,9 @@ pipeline{
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
-        docker.withRegistry('https://registry.hub.docker.com', 'docker-hu') {
+        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
             app.push("${env.BUILD_NUMBER}")
-            app.push("sCollect")
+            app.push("ecollect")
         }
         echo 'COMPLETED SUCCESSFULL'
         }
