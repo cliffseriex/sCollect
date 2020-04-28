@@ -1,9 +1,8 @@
+app = ''
 pipeline{
    agent any
    
-   environment{
-   def app = ''
-   }
+   
    stages{
      
       stage('Build image') {
