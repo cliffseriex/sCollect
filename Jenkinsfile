@@ -11,7 +11,7 @@ pipeline{
             /* This builds the actual image; synonymous to
          * docker build on the command line */
         echo ' Building Docker Image ...'
-        app = docker.build("scollect:ecollect") 
+        app = docker.build("cliffseriex/scollect:${env.BUILD_NUMBER}") 
             }  
          }
     }
@@ -23,6 +23,7 @@ pipeline{
          * For this example, we're using a Volkswagen-type approach ;-) */
         app.inside {
             sh 'echo "Tests passed"'
+            sh 'ls -al'
         }
        }
        }
@@ -35,10 +36,8 @@ pipeline{
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
-        docker.withRegistry('registry.hub.docker.com/cliffseriex/scollect', 'dockhub') {
-           def registry_url = "registry.hub.docker.com/"
-            app.push("${env.BUILD_NUMBER}")
-            app.push("ecollect")
+        docker.withRegistry('https://registry.hub.docker.com', 'dockhub') {
+            app.push
         }
         echo 'COMPLETED SUCCESSFULL'
         }
