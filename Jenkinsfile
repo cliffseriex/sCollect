@@ -35,7 +35,8 @@ pipeline{
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
-        docker.withRegistry('https://index.docker.io/repository/docker/cliffseriex/scollect', 'dockhub') {
+        docker.withRegistry('registry.hub.docker.com/cliffseriex/scollect', 'dockhub') {
+           def registry_url = "registry.hub.docker.com/"
             app.push("${env.BUILD_NUMBER}")
             app.push("ecollect")
         }
