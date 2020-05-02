@@ -42,9 +42,17 @@ pipeline{
                  echo 'Docker login successfull'
          }
          */
-        docker.withRegistry('https://hub.docker.com/repositories/cliffseriex/scollect', 'dockhub') {
+        /*docker.withRegistry('https://hub.docker.com/repositories/cliffseriex/scollect', 'dockhub') {
             app.push
+        }*/
+                withCredentials([usernamePassword( credentialsId: 'dockhub', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
+        def registry_url = "registry.hub.docker.com/"
+        sh "docker login -u $USER -p $PASSWORD ${registry_url}"
+        docker.withRegistry("http://${registry_url}", "dockhubs") {
+            // Push your image now
+             echo 'READY TO PUSH'
         }
+    }
         echo 'COMPLETED SUCCESSFULL'
         }
         }
