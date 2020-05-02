@@ -52,7 +52,7 @@ pipeline{
         sh "docker login -u $USER -p $PASSWORD ${registry_url}"
         docker.withRegistry("http://${registry_url}", "dockhub") {
             // Push your image now
-           //sh  "docker push ${app}"
+           sh  "docker push ${image_name}"
              echo "READY TO PUSH ${image_name}"
         }
     }
