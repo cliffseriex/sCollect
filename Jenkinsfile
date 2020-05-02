@@ -53,7 +53,7 @@ pipeline{
         docker.withRegistry("http://${registry_url}", "dockhub") {
             // Push your image now
           // sh  "docker push cliffseriex/scollect:${env.BUILD_NUMBER}"
-           app.push
+           app.push()
              echo "READY TO PUSH ${image_name}"
         }
     }
