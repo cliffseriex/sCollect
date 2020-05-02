@@ -11,7 +11,7 @@ pipeline{
             /* This builds the actual image; synonymous to
          * docker build on the command line */
         echo ' Building Docker Image ...'
-        image_name = "cliffseriex/scollect"
+               image_name = "cliffseriex/scollect:${env.BUILD_NUMBER}"
         app = docker.build(image_name) 
             }  
          }
@@ -37,16 +37,7 @@ pipeline{
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
-         /*     
-              withCredentials([usernamePassword(credentialsId: 'dockhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                 echo 'username $USERNAME  ---  password $PASSWORD'
-                sh 'docker login --username=cliffseriex -p=Poljez@cliff#1'
-                 echo 'Docker login successfull'
-         }
-         */
-        /*docker.withRegistry('https://hub.docker.com/repositories/cliffseriex/scollect', 'dockhub') {
-            app.push
-        }*/
+      
                 withCredentials([usernamePassword( credentialsId: 'dockhub', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
         def registry_url = "registry.hub.docker.com/"
         sh "docker login -u $USER -p $PASSWORD ${registry_url}"
@@ -54,7 +45,7 @@ pipeline{
             // Push your image now
           // sh  "docker push cliffseriex/scollect:${env.BUILD_NUMBER}"
            app.push()
-             echo "READY TO PUSH ${image_name}"
+             echo "PUSHED ${image_name}"
         }
     }
         echo 'COMPLETED SUCCESSFULL'
