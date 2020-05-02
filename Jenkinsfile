@@ -56,7 +56,7 @@ pipeline{
       steps{
          script{
   //Deploy image to staging in ECS
-        sh "aws ecs update-service --service mService  --cluster default --desired-count 0"
+        sh "aws ecs update-service --service mService  --cluster default --desired-count 0 --region us-east-2"
         timeout(time: 5, unit: 'MINUTES') {
             waitUntil {
                 sh "aws ecs describe-services --service mService  --cluster default   > .amazon-ecs-service-status.json"
@@ -69,7 +69,7 @@ pipeline{
                 return ecsServiceStatus.get('runningCount') == 0 && ecsServiceStatus.get('status') == "ACTIVE"
             }
         }
-        sh "aws ecs update-service --service mService  --cluster default  --desired-count 1"
+        sh "aws ecs update-service --service mService  --cluster default  --desired-count 1 --region us-east-2"
         timeout(time: 5, unit: 'MINUTES') {
             waitUntil {
                 sh "aws ecs describe-services --service mService  --cluster default  > .amazon-ecs-service-status.json"
