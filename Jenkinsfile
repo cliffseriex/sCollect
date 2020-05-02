@@ -1,4 +1,5 @@
 app = ''
+image_name = ''
 pipeline{
    agent any
   
@@ -10,7 +11,8 @@ pipeline{
             /* This builds the actual image; synonymous to
          * docker build on the command line */
         echo ' Building Docker Image ...'
-        app = docker.build("cliffseriex/scollect:${env.BUILD_NUMBER}") 
+        image_name = "cliffseriex/scollect:${env.BUILD_NUMBER}"
+        app = docker.build(image_name) 
             }  
          }
     }
@@ -51,7 +53,7 @@ pipeline{
         docker.withRegistry("http://${registry_url}", "dockhub") {
             // Push your image now
            //sh  "docker push ${app}"
-             echo "READY TO PUSH ${app}"
+             echo "READY TO PUSH ${image_name}"
         }
     }
         echo 'COMPLETED SUCCESSFULL'
