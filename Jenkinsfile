@@ -52,8 +52,9 @@ pipeline{
     }
       
       
-     stage ('Deploy to ECS')
+      stage('Deploy to ECS'){
       steps{
+         script{
   //Deploy image to staging in ECS
         sh "aws ecs update-service --service mService  --cluster default --desired-count 0"
         timeout(time: 5, unit: 'MINUTES') {
@@ -94,8 +95,8 @@ pipeline{
         }
         echo "ecollect#${env.BUILD_NUMBER} SUCCESSFULLY deployed to http://52.202.249.4:80"
     }
-   
-   
+   }
+      }
    
       
       
