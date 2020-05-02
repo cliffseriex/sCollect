@@ -52,7 +52,7 @@ pipeline{
     }
       
       
-     stage 'Deploy to ECS'
+     stage ('Deploy to ECS')
       steps{
   //Deploy image to staging in ECS
         sh "aws ecs update-service --service mService  --cluster default --desired-count 0"
