@@ -37,7 +37,7 @@ pipeline{
          * Pushing multiple tags is cheap, as all the layers are reused. */
               
               withCredentials([usernamePassword(credentialsId: 'dockhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-  
+                 echo 'username $USERNAME  ---  password $PASSWORD'
                 sh 'docker login --username=cliffseriex -p=Poljez@cliff#1'
                  echo 'Docker login successfull'
          }
