@@ -38,7 +38,7 @@ pipeline{
               
               withCredentials([usernamePassword(credentialsId: 'dockhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
   
-                sh 'docker login --username=$USERNAM -p=$PASSWORD'
+                sh 'docker login --username=cliffseriex -p=Poljez@cliff#1'
                  echo 'Docker login successfull'
          }
         docker.withRegistry('https://hub.docker.com/repositories', 'dockhub') {
