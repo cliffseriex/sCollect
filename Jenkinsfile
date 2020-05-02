@@ -42,7 +42,7 @@ pipeline{
                  echo 'Docker login successfull'
          }
          */
-        docker.withRegistry('https://hub.docker.com/repositories', 'dockhub') {
+        docker.withRegistry('https://hub.docker.com/repositories/cliffseriex/scollect', 'dockhub') {
             app.push
         }
         echo 'COMPLETED SUCCESSFULL'
