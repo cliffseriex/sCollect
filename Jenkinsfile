@@ -52,7 +52,8 @@ pipeline{
         sh "docker login -u $USER -p $PASSWORD ${registry_url}"
         docker.withRegistry("http://${registry_url}", "dockhub") {
             // Push your image now
-           sh  "docker push cliffseriex/scollect:${env.BUILD_NUMBER}"
+          // sh  "docker push cliffseriex/scollect:${env.BUILD_NUMBER}"
+           app.push
              echo "READY TO PUSH ${image_name}"
         }
     }
