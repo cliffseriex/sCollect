@@ -94,7 +94,7 @@ pipeline{
         }
         echo "ecollect#${env.BUILD_NUMBER} SUCCESSFULLY deployed to http://52.202.249.4:80"
     }
-   }
+   
    
    
       
