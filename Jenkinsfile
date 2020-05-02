@@ -36,6 +36,12 @@ pipeline{
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
+              
+              withCredentials([usernamePassword(credentialsId: 'dockhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+  
+                 docker login --username=$USERNAM -p=$PASSWORD
+                 echo 'Docker login successfull'
+         }
         docker.withRegistry('https://hub.docker.com/repositories', 'dockhub') {
             app.push
         }
