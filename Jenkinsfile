@@ -1,10 +1,9 @@
 app = ''
 pipeline{
    agent any
-   
-   
+  
    stages{
-     
+ 
       stage('Build image') {
          steps{
             script{
@@ -39,7 +38,7 @@ pipeline{
               
               withCredentials([usernamePassword(credentialsId: 'dockhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
   
-                 docker login --username=$USERNAM -p=$PASSWORD
+                sh 'docker login --username=$USERNAM -p=$PASSWORD'
                  echo 'Docker login successfull'
          }
         docker.withRegistry('https://hub.docker.com/repositories', 'dockhub') {
