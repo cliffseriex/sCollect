@@ -37,21 +37,67 @@ pipeline{
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
-      
-                withCredentials([usernamePassword( credentialsId: 'dockhub', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
+        withCredentials([usernamePassword( credentialsId: 'dockhub', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
         def registry_url = "registry.hub.docker.com/"
         sh "docker login -u $USER -p $PASSWORD ${registry_url}"
         docker.withRegistry("http://${registry_url}", "dockhub") {
             // Push your image now
-          // sh  "docker push cliffseriex/scollect:${env.BUILD_NUMBER}"
            app.push()
              echo "PUSHED ${image_name}"
         }
     }
-        echo 'COMPLETED SUCCESSFULL'
+     echo 'COMPLETED SUCCESSFULL'
         }
         }
     }
+      
+      
+     stage 'Deploy to ECS'
+      steps{
+  //Deploy image to staging in ECS
+        sh "aws ecs update-service --service mService  --cluster default --desired-count 0"
+        timeout(time: 5, unit: 'MINUTES') {
+            waitUntil {
+                sh "aws ecs describe-services --service mService  --cluster default   > .amazon-ecs-service-status.json"
+
+                // parse `describe-services` output
+                def ecsServicesStatusAsJson = readFile(".amazon-ecs-service-status.json")
+                def ecsServicesStatus = new groovy.json.JsonSlurper().parseText(ecsServicesStatusAsJson)
+                println "$ecsServicesStatus"
+                def ecsServiceStatus = ecsServicesStatus.services[0]
+                return ecsServiceStatus.get('runningCount') == 0 && ecsServiceStatus.get('status') == "ACTIVE"
+            }
+        }
+        sh "aws ecs update-service --service mService  --cluster default  --desired-count 1"
+        timeout(time: 5, unit: 'MINUTES') {
+            waitUntil {
+                sh "aws ecs describe-services --service mService  --cluster default  > .amazon-ecs-service-status.json"
+
+                // parse `describe-services` output
+                def ecsServicesStatusAsJson = readFile(".amazon-ecs-service-status.json")
+                def ecsServicesStatus = new groovy.json.JsonSlurper().parseText(ecsServicesStatusAsJson)
+                println "$ecsServicesStatus"
+                def ecsServiceStatus = ecsServicesStatus.services[0]
+                return ecsServiceStatus.get('runningCount') == 0 && ecsServiceStatus.get('status') == "ACTIVE"
+            }
+        }
+        timeout(time: 5, unit: 'MINUTES') {
+            waitUntil {
+                try {
+                   // sh "curl http://52.202.249.4:80"
+                    sh "Getting there"
+                    return true
+                } catch (Exception e) {
+                    return false
+                }
+            }
+        }
+        echo "ecollect#${env.BUILD_NUMBER} SUCCESSFULLY deployed to http://52.202.249.4:80"
+    }
+   }
+   
+   
+      
       
       
   }
